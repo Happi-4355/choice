@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="d420f56f-7a81-48af-990a-720a1d3f9d9a" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="choiceFlow" doc:id="44d5fdc0-7dc5-4d37-9096-0d3ef20281c1" >
+		<http:listener doc:name="Listener" doc:id="96fb7d66-7681-4cdb-aa7c-7671a507c086" config-ref="HTTP_Listener_config" path="/choice"/>
+		<logger level="INFO" doc:name="Logger" doc:id="3b24e622-f4ce-4776-8489-66d78016e7a0" message="input payload..............."/>
+		<choice doc:name="Choice" doc:id="56c723b1-8769-4d43-9954-b43d49dd73be" >
+			<when expression='payload.city  ==  "hyd"'>
+				<set-payload value="#[payload]" doc:name="Set Payload" doc:id="bdbd0bda-cddf-4676-ac11-28c1475766b9" />
+			</when>
+			<when expression='payload.city   == "chn"'>
+				<set-payload value="#[payload]" doc:name="Set Payload" doc:id="a41d7714-6fdc-4619-8d6a-961bdc48b5af" />
+			</when>
+			<otherwise >
+				<set-payload value='#["given condition is wrong"]' doc:name="Set Payload" doc:id="9dfe5fc6-5f1f-4372-a85c-6dbf1b08c2d2" />
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="1449e0f5-734e-431a-8c75-e9a4a2fb1b1c" message="response.........#[payload]"/>
+	</flow>
+</mule>
